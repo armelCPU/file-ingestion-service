@@ -30,8 +30,6 @@ def process_document_ingestion(
 
 
     except SoftTimeLimitExceeded:
-        publish_progression(
-       
         logging.exception(f"Timeout Error for document: {document_uuid} ingestion")
 
     except Exception as e:
