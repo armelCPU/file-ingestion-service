@@ -1,7 +1,7 @@
 class Memory:
     __instance = None
     mongo_wrapper = None
-    es_wrapper = None
+    postgres_wrapper = None
     text_processor = None
     redis_client = None
     indexes = {}
