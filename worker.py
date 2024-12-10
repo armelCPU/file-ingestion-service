@@ -4,11 +4,11 @@ from kombu import Exchange, Queue
 from settings import settings
 
 celery_app = Celery(
-    "file_management_worker",
+    "file_worker",
     broker_heartbeat=0,
     backend=settings.CELERY_RESULT_BACKEND,
     broker=settings.CELERY_BROKER_URL,
-    include=["workers.tasks.documents"],
+    include=["workers.tasks"],
 )
 celery_app.conf.update(task_track_started=True)
 celery_app.conf.update(result_persistent=True)
@@ -40,47 +40,12 @@ celery_app.conf.update(
     }
 )
 
-kumbu_doc_exchange = Exchange("kumbu_doc_exchange", type="direct")
-
-
-upload_document_queue = Queue(
-    "upload_document_queue",
-    exchange=kumbu_doc_exchange,
-    routing_key="kumbu_doc_exchange.routing.key",
-    queue_arguments={
-        "x-max-priority": 10
-    }
-)
-upload_zip_queue = Queue(
-    "upload_zip_queue",
-    exchange=kumbu_doc_exchange,
-    routing_key="kumbu_doc_exchange.routing.key",
-    queue_arguments={
-        "x-max-priority": 10
-    }
-)
-page_image_queue = Queue(
-    "page_image_queue",
-    exchange=kumbu_doc_exchange,
-    routing_key="kumbu_doc_exchange.routing.key",
-    queue_arguments={
-        "x-max-priority": 10
-    }
-)
-
-# celery_app.conf.update(
-#     task_queues={
-#         "upload_document_queue": {
-#             "queue_arguments": {"x-max-priority": 10},
-#         }
-#     }
-# )
-
 celery_app.conf.update(
-    task_routes={
-        "workers.tasks.documents.document_indexing.*": {"queue": upload_document_queue},
-        "workers.tasks.documents.zip_document_indexing.*": {"queue": upload_zip_queue},
-        "workers.tasks.pages.page_processing_task.create_page_batch_entities_task": {"queue": "page_entity_queue"},
-        "workers.tasks.pages.page_processing_task.create_page_batch_images": {"queue": page_image_queue},
+    task_queues={
+        "file_queue": {
+            "queue_arguments": {"x-max-priority": 10},
+        }
     }
 )
+
+celery_app.conf.update(task_routes={"workers.*": {"queue": "file_queue"}})

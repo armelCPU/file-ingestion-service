@@ -1,12 +1,15 @@
 # File Service
+## Run App
 ```commandline
-celery -A worker.celery_app worker --loglevel=info --concurrency=3 --without-heartbeat --without-mingle --without-gossip -Q file_management_queue
+python app.py
 ```
 
-
-Make sure packages are always with the correct version before merge.
+## Run celery
+```commandline
+celery -A worker.celery_app worker --loglevel=info --concurrency=3 --without-heartbeat --without-mingle --without-gossip -Q file_queue
+```
 
 ## Purge the queue
 ```commandline
-celery -A worker.celery_app purge -Q file_management_queue
+celery -A worker.celery_app purge -Q file_queue
 ```

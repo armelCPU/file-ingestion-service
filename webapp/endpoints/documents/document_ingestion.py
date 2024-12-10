@@ -1,16 +1,11 @@
-import logging
-
-from celery.result import AsyncResult
-
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi.openapi.models import APIKey
 from starlette import status
 
+from commons.schemas.document_input import DocumentIngestionIn
 from memory import Memory
 from webapp.auth_middleware import check_auth_token
-from worker import celery_app
-from workers.tasks.documents.document_indexing import provide_appropriate_priority
+from workers.tasks.documents.document_indexing import process_document_ingestion
 
 memory = Memory.getInstance()
 
@@ -32,10 +27,11 @@ async def ingest_document(
 ):
     _ = process_document_ingestion.apply_async(
         kwargs={
-            "document_id": document_in.document_uuid,
+            "document_id": document_in.document_id,
             "workspace_id": document_in.workspace_id,
-            "document_url": document_in.url,
+            "document_url": document_in.document_url,
             "user_id": document_in.user_id,
+            "document_name": document_in.document_name,
         },
         countdown=3,
         soft_time_limit=720,
@@ -43,4 +39,4 @@ async def ingest_document(
         priority=0,
     )
 
-        
+    return "Ingestion is running ..."

@@ -6,4 +6,4 @@ envparse==0.2.0
 psutil==5.9.7
 requests==2.31.0
 redis==4.5.5
-pika==1.3.2
+
