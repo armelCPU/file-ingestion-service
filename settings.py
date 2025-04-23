@@ -1,9 +1,11 @@
 import os
+from dotenv import load_dotenv
 from typing import List
 
 from pydantic import AnyHttpUrl
 from envparse import env
 
+load_dotenv()
 
 class BaseConfig:
     APP_NAME: str = env("APP_NAME", "File service")
@@ -32,5 +34,17 @@ class BaseConfig:
     # Max number of upload per user
     MAX_UPLOAD_PER_USER = env("MAX_UPLOAD_PER_USER", 4, cast=int)
 
+    # OPENAI
+    OPENAI_API_KEY: str = env("OPENAI_API_KEY", default=None)
+
+    # PostgreSQL
+    POSTGRES_USER: str = env("POSTGRES_USER", "rag_user")
+    POSTGRES_PASSWORD: str = env("POSTGRES_PASSWORD", "rag_pass")
+    POSTGRES_DB: str = env("POSTGRES_DB", "rag_db")
+    POSTGRES_HOST: str = env("POSTGRES_HOST", "postgres")
+    POSTGRES_PORT: int = env("POSTGRES_PORT", 5432, cast=int)
+
+    # Mode mock
+    MOCK_MODE: bool = os.getenv("MOCK_MODE", "false").lower() == "true"
 
 settings = BaseConfig()
