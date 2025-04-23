@@ -26,3 +26,4 @@ L'API d'OpenAI est utilisée pour calculer les embeddings de chaque document. Ce
 Implémenter une version mockée de l'API et du worker dans le framework Python de ton choix.
  - Bonus : Créer un endpoint pour implémenter la recherche sémantique dans la base des fichiers.
 
+Voir [README_DEV.md](./README_DEV.md) pour les détails techniques.
