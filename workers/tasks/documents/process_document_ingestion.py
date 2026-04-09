@@ -63,6 +63,7 @@ def process_document_ingestion(
         logger.info("Successfully ingested document %s", document_id)
     except SoftTimeLimitExceeded:
         logger.exception("Timeout during ingestion of document %s", document_id)
+        raise
     except Exception:
         logger.exception("Error during ingestion of document %s", document_id)
     finally:

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from fastapi.openapi.models import APIKey
+from fastapi.security.api_key import APIKey
 from starlette import status
 
 from web.schemas.document_schema import DocumentIngestionIn
