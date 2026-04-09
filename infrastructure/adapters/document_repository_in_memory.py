@@ -10,6 +10,7 @@ class DocumentRepositoryInMemory(IDocumentRepository):
         self._next_id = 1
 
     def save(self, document: Document) -> Document:
+        """Persist a document. Assigns an auto-incremented id if none is set. Returns the saved copy."""
         if document.id is None:
             saved = document.model_copy(update={"id": self._next_id})
             self._next_id += 1
